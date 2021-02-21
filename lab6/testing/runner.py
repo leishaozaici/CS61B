@@ -468,6 +468,7 @@ if __name__ == "__main__":
             environ['CLASSPATH'] = "{};{};{}".format(abspath(getcwd()), lib_glob, environ['CLASSPATH'])
         else:
             environ['CLASSPATH'] = "{};{}".format(abspath(getcwd()), lib_glob)
+        capers_dir = "\"" + capers_dir + "\"" # in case path has a space in it
     else:
         if ('CLASSPATH' in environ):
             environ['CLASSPATH'] = "{}:{}:{}".format(abspath(getcwd()), lib_glob, environ['CLASSPATH'])
