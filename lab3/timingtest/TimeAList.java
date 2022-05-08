@@ -29,12 +29,20 @@ public class TimeAList {
         AList<Integer> opCounts = new AList<>();
         AList<Integer> listStore = new AList<>();
         Stopwatch sto = new Stopwatch();
-        for (int i = 0; i < 64000; i++) {
+        int k = 0;
+        int ops = 0;
+        for (int i = 0; i < 128000; i++) {
             listStore.addLast(i);
+            ops++;
+            if (listStore.size() == Math.pow(2, k) * 1000) {
+                times.addLast(sto.elapsedTime());
+                Ns.addLast(listStore.size());
+                opCounts.addLast(ops);
+                k++;
+            }
         }
-        times.addLast(sto.elapsedTime());
-        Ns.addLast(64000);
-        opCounts.addLast(64000);
+
         printTimingTable(Ns, times, opCounts);
     }
 }
+

@@ -35,7 +35,7 @@ public class TestBuggyAList {
         AListNoResizing<Integer> correct = new AListNoResizing<>();
         BuggyAList<Integer> broken = new BuggyAList<>();
 
-        int N = 5000;
+        int N = 10000;
         for (int i = 0; i < N; i += 1) {
             int operationNumber = StdRandom.uniform(0, 4);
             if (operationNumber == 0) {
@@ -46,13 +46,23 @@ public class TestBuggyAList {
                 System.out.println("addLast(" + randVal + ")");
             } else if (operationNumber == 1) {
                 // size
-                int size = broken.size();
-                System.out.println("size: " + size);
-            }
-            if (operationNumber > 0) {
-                if (broken.size() != 0) {
-                    System.out.println("getLast(" + broken.getLast() + ")");
-                    System.out.println("removeLast(" + broken.removeLast() + ")");
+                int csize = correct.size();
+                int bsize = broken.size();
+                System.out.println("csize: " + csize + " bsize: " + bsize);
+                assertEquals(csize, bsize);
+            } else if (operationNumber == 2) {
+                if (broken.size() != 0 && correct.size() != 0) {
+                    int cget = correct.getLast();
+                    int bget = broken.getLast();
+                    System.out.println("cgetLast(" + cget + ")" + " bgetLast(" + bget + ")");
+                    assertEquals(cget, bget);
+                }
+            } else if (operationNumber == 3) {
+                if (broken.size() != 0 && correct.size() != 0) {
+                    int cremove = correct.removeLast();
+                    int bremove = broken.removeLast();
+                    System.out.println("cremoveLast(" + cremove + ")" + " bremoveLast(" + bremove + ")");
+                    assertEquals(cremove, bremove);
                 }
             }
         }
