@@ -24,24 +24,44 @@ public class TimeSLList {
 
     public static void timeGetLast() {
         // TODO: YOUR CODE HERE
-        SLList<Integer> slList = new SLList<>();
+//        SLList<Integer> slList = new SLList<>();
         AList<Integer> Ns = new AList<>();
         AList<Double> times = new AList<>();
         AList<Integer> opCounts = new AList<>();
-        int k = 0;
-        int ops = 1000;
-        for (int i = 0; i < 128000; i++) {
-            slList.addLast(i);
-            if (slList.size() == Math.pow(2, k) * 1000) {
-                Stopwatch sto = new Stopwatch();
-                for (int j = 0; j < ops; j++) {
-                    slList.getLast();
-                }
-                times.addLast(sto.elapsedTime());
-                Ns.addLast(slList.size());
-                opCounts.addLast(ops);
-                k++;
+//        int k = 0;
+//        int ops = 1000;
+//        for (int i = 0; i < 128000; i++) {
+//            slList.addLast(i);
+//            if (slList.size() == Math.pow(2, k) * 1000) {
+//                Stopwatch sto = new Stopwatch();
+//                for (int j = 0; j < ops; j++) {
+//                    slList.getLast();
+//                }
+//                times.addLast(sto.elapsedTime());
+//                Ns.addLast(slList.size());
+//                opCounts.addLast(ops);
+//                k++;
+//            }
+//        }
+        int listLength = 500;
+        int M = 10000;
+        for (int i = 0; i < 8; i++) {
+            listLength *= 2;
+
+            SLList<Integer> testList = new SLList<>();
+
+            for (int j = 0; j < listLength; j++) {
+                testList.addLast(1);
             }
+
+            Stopwatch sw = new Stopwatch();
+
+            for (int j = 0; j < M; j++) {
+                testList.getLast();
+            }
+            times.addLast(sw.elapsedTime());
+            Ns.addLast(listLength);
+            opCounts.addLast(M);
         }
         printTimingTable(Ns, times, opCounts);
     }
