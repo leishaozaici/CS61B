@@ -85,7 +85,7 @@ public class ArrayDeque<T> /*implements Iterable<T>*/ {
     }
 
     public T get(int index) {
-        return a[(nextFirst + 1 + index) % a.length];
+        return a[index];
     }
 
     public void printDeque() {
