@@ -35,7 +35,7 @@ public class ArrayDeque<T> /*implements Iterable<T>*/ {
     }
 
     public void addFirst(T item) {
-        if (a.length == n) {
+        if (n == a.length - 2) {
             resize(a.length * 2);
         }
         a[nextFirst] = item;
@@ -44,11 +44,11 @@ public class ArrayDeque<T> /*implements Iterable<T>*/ {
     }
 
     public void addLast(T item) {
-        if (a.length == n) {
+        if (n == a.length - 2) {
             resize(a.length * 2);
         }
         a[nextLast] = item;
-        nextFirst = (nextLast + 1) % a.length;
+        nextLast = (nextLast + 1) % a.length;
         n++;
     }
 
@@ -56,9 +56,9 @@ public class ArrayDeque<T> /*implements Iterable<T>*/ {
         if (n == 0) {
             return null;
         }
-        nextFirst = (nextFirst + 1) % a.length;
         T item = a[nextFirst];
         a[nextFirst] = null;
+        nextFirst = (nextFirst + 1) % a.length;
         n--;
         if (n > 8 && n == a.length / 4) {
             resize(a.length / 2);
@@ -70,11 +70,7 @@ public class ArrayDeque<T> /*implements Iterable<T>*/ {
         if (n == 0) {
             return null;
         }
-        if (nextLast == 0) {
-            nextLast = (nextLast + a.length - 1) % a.length;
-        } else {
-            nextLast = nextLast - 1;
-        }
+        nextLast = (nextLast + a.length - 1) % a.length;
         T item = a[nextLast];
         a[nextLast] = null;
         n--;
