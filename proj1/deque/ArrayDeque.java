@@ -56,8 +56,8 @@ public class ArrayDeque<T> /*implements Iterable<T>*/ {
         if (n == 0) {
             return null;
         }
-        T item = a[nextFirst];
         nextFirst = (nextFirst + 1) % a.length;
+        T item = a[nextFirst];
         a[nextFirst] = null;
         n--;
         if (n > 8 && n == a.length / 4) {
@@ -70,8 +70,12 @@ public class ArrayDeque<T> /*implements Iterable<T>*/ {
         if (n == 0) {
             return null;
         }
+        if (nextLast == 0) {
+            nextLast = (nextLast + a.length - 1) % a.length;
+        } else {
+            nextLast = nextLast - 1;
+        }
         T item = a[nextLast];
-        nextLast = (nextLast + a.length - 1) % a.length;
         a[nextLast] = null;
         n--;
         if (n > 8 && n == a.length / 4) {
