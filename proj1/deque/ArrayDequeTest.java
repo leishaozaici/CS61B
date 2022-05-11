@@ -185,4 +185,15 @@ public class ArrayDequeTest {
 
         }
     }
+
+    @Test
+    public void DequeTest() {
+        ArrayDeque<String> deque = new ArrayDeque<>(4, 5);
+        deque.addLast("a");
+        deque.addLast("b");
+        deque.addFirst("c");
+        deque.addLast("d");
+        deque.addLast("e");
+        deque.addFirst("f");
+    }
 }

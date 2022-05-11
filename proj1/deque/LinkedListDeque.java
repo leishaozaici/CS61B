@@ -1,10 +1,15 @@
 package deque;
 
-public class LinkedListDeque<T> /*implements Iterable<T>, Deque<T> */ {
+import edu.princeton.cs.algs4.StdOut;
+
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
     private Node first;
     private Node last;
     private int n;
-
+    
     private class Node {
         private T t;
         private Node pre, next;
@@ -15,11 +20,6 @@ public class LinkedListDeque<T> /*implements Iterable<T>, Deque<T> */ {
         n = 0;
         first = null;
         last = null;
-    }
-
-    // is the LinkedListDeque empty?
-    public boolean isEmpty() {
-        return n == 0;
     }
 
     // return the number of items on the LinkedListDeque
@@ -94,28 +94,28 @@ public class LinkedListDeque<T> /*implements Iterable<T>, Deque<T> */ {
         return t;
     }
 
-    /*public void printDeque() {
+    public void printDeque() {
         for (int i = 0; i < n; i++) {
             StdOut.print(get(i) + " ");
         }
         StdOut.println();
-    }*/
+    }
 
-    /*public T get(int index) {
+    public T get(int index) {
         int i = 0;
         T t1 = first.t;
         for (T t : this) {
-            if (i == size()) {
+            if (i == index) {
                 t1 = t;
                 break;
             }
             i++;
         }
         return t1;
-    }*/
+    }
 
     public T getRecursive(int index) {
-        int i = 0;
+        /*int i = 0;
         T t = first.t;
         if (i == index) {
             return t;
@@ -124,11 +124,31 @@ public class LinkedListDeque<T> /*implements Iterable<T>, Deque<T> */ {
             i++;
             getRecursive(index);
         }
-        return t;
+        return t;*/
+       /* if (first.t != get(index) && first != null) {
+            first = first.next;
+            getRecursive(index);
+        }
+        if (first.t == get(index)) {
+            first = first.next;
+            return get(index);
+        }
+        return null;*/
+        if (index < 0 || index > n - 1) {
+            return null;
+        }
+        return getRecursiveHelper(index, first.next);
+    }
+
+    private T getRecursiveHelper(int index, Node currentNode) {
+        if (index == 0) {
+            return currentNode.t;
+        }
+        return getRecursiveHelper(index - 1, currentNode.next);
     }
 
     // return an iterator over items in order from front to back
-    /*public Iterator<T> iterator() {
+    public Iterator<T> iterator() {
         return new DequeIterator();
     }
 
@@ -147,38 +167,30 @@ public class LinkedListDeque<T> /*implements Iterable<T>, Deque<T> */ {
             current = current.next;
             return t;
 
-        }*/
+        }
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null) {
+            return false;
+        }
+        if (!(o instanceof Deque)) {
+            return false;
+        }
+        Deque<T> ol = (Deque<T>) o;
+        if (ol.size() != this.size()) {
+            return false;
+        }
+        for (int i = 0; i < n; i++) {
+            if (!(ol.get(i).equals(this.get(i)))) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
 
-// unit testing (required)
-//    public static void main(String[] args) {
-//        LinkedListDeque<String> LinkedListDeque = new LinkedListDeque<>();
-//        for (int i = 0; i < 3; i++) {
-//            LinkedListDeque.addLast(i + "");
-//        }
-//        while (!LinkedListDeque.isEmpty()) {
-//            StdOut.println(LinkedListDeque.removeFirst());
-//        }
-//        LinkedListDeque<Integer> ideque = new LinkedListDeque<>();
-//        for (int i = 0; i < 20; i++) {
-//            ideque.addFirst(i);
-//        }
-//        Iterator<Integer> iterator = ideque.iterator();
-//        while (iterator.hasNext()) {
-//            StdOut.println(iterator.next());
-//        }
-//
-//        while (!ideque.isEmpty()) {
-//            StdOut.println(ideque.removeLast());
-//        }
-//        System.out.println("************************");
-//        for (int i = 0; i < 3; i++) {
-//            if (i % 2 == 0) {
-//                ideque.addFirst(i);
-//            } else {
-//                StdOut.println(ideque.removeLast());
-//            }
-//        }
-//
-//    }
 

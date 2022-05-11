@@ -2,7 +2,10 @@ package deque;
 
 import edu.princeton.cs.algs4.StdOut;
 
-public class ArrayDeque<T> /*implements Iterable<T>*/ {
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
     private T[] a;
     private int n;
     private int nextFirst;
@@ -16,9 +19,11 @@ public class ArrayDeque<T> /*implements Iterable<T>*/ {
         nextLast = 0;
     }
 
-    // is the randomized queue empty?
-    public boolean isEmpty() {
-        return n == 0;
+    public ArrayDeque(int nf, int nl) {
+        a = (T[]) new Object[8];
+        n = 0;
+        nextFirst = nf;
+        nextLast = nl;
     }
 
     // return the number of items on the randomized queue
@@ -35,7 +40,7 @@ public class ArrayDeque<T> /*implements Iterable<T>*/ {
     }
 
     public void addFirst(T item) {
-        if (n == a.length - 2) {
+        if (n == a.length - 1) {
             resize(a.length * 2);
         }
         a[nextFirst] = item;
@@ -44,7 +49,7 @@ public class ArrayDeque<T> /*implements Iterable<T>*/ {
     }
 
     public void addLast(T item) {
-        if (n == a.length - 2) {
+        if (n == a.length - 1) {
             resize(a.length * 2);
         }
         a[nextLast] = item;
@@ -81,7 +86,11 @@ public class ArrayDeque<T> /*implements Iterable<T>*/ {
         if (n == 0) {
             return null;
         }
-        nextLast = (nextLast + a.length - 1) % a.length;
+        if (nextLast == 0) {
+            nextLast = (nextLast + a.length - 1) % a.length;
+        } else {
+            nextLast = nextLast - 1;
+        }
         T item = a[nextLast];
         a[nextLast] = null;
         n--;
@@ -103,7 +112,7 @@ public class ArrayDeque<T> /*implements Iterable<T>*/ {
     }
 
     // return an independent iterator over items in random order
-   /* public Iterator<T> iterator() {
+    public Iterator<T> iterator() {
         return new ArrayDequeIterator();
     }
 
@@ -126,5 +135,27 @@ public class ArrayDeque<T> /*implements Iterable<T>*/ {
             }
             return get(m++);
         }
-    }*/
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null) {
+            return false;
+        }
+        if (!(o instanceof Deque)) {
+            return false;
+        }
+        Deque<T> ol = (Deque<T>) o;
+        if (ol.size() != this.size()) {
+            return false;
+        }
+        for (int i = 0; i < n; i++) {
+            if (!(ol.get(i).equals(this.get(i)))) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
