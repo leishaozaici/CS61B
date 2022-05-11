@@ -56,9 +56,20 @@ public class ArrayDeque<T> /*implements Iterable<T>*/ {
         if (n == 0) {
             return null;
         }
+        /*T item;
+        if (nextFirst != 0) {
+            int temp = (nextFirst + 1) % a.length;
+            item = a[nextFirst];
+            a[nextFirst] = null;
+            nextFirst = temp;
+        } else {
+            item = a[nextFirst];
+            a[nextFirst] = null;
+            nextFirst = (nextFirst + 1) % a.length;
+        }*/
+        nextFirst = (nextFirst + 1) % a.length;
         T item = a[nextFirst];
         a[nextFirst] = null;
-        nextFirst = (nextFirst + 1) % a.length;
         n--;
         if (n > 8 && n == a.length / 4) {
             resize(a.length / 2);
