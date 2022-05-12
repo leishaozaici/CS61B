@@ -1,5 +1,6 @@
 package deque;
 
+import edu.princeton.cs.algs4.StdOut;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -164,9 +165,9 @@ public class ArrayDequeTest {
             lld1.addLast(i);
         }
 
-        for (double i = 0; i < 500000; i++) {
+        /*for (double i = 0; i < 500000; i++) {
             assertEquals("Should have the same value", i, (double) lld1.removeFirst(), 0.0);
-        }
+        }*/
 
 //        for (double i = 999999; i > 500000; i--) {
 //            assertEquals("Should have the same value", i, (double) lld1.removeLast(), 0.0);
@@ -186,7 +187,7 @@ public class ArrayDequeTest {
         }
     }
 
-    @Test
+    /*@Test
     public void DequeTest() {
         ArrayDeque<String> deque = new ArrayDeque<>(4, 5);
         deque.addLast("a");
@@ -195,5 +196,31 @@ public class ArrayDequeTest {
         deque.addLast("d");
         deque.addLast("e");
         deque.addFirst("f");
+    }*/
+    @Test
+    public void addfAndrmlTest() {
+        ArrayDeque<Integer> deque = new ArrayDeque<>();
+        /*for (int i = 0; i < 10; i++) {
+            deque.addLast(i);
+        }
+        for (int i = 0; i < 10; i++) {
+            assertEquals("sameValue", i, (int) deque.removeFirst());
+
+        }*/
+        deque.addFirst(0);
+//        deque.removeLast();
+        deque.addFirst(2);
+        deque.get(0);
+        StdOut.print(deque.removeLast());
     }
+
+    @Test
+    public void addlAndrmfTest() {
+        ArrayDeque<Integer> ArrayDeque = new ArrayDeque<>();
+        ArrayDeque.addLast(0);
+        ArrayDeque.addLast(1);
+        ArrayDeque.addLast(2);
+        StdOut.print(ArrayDeque.removeFirst());
+    }
+
 }

@@ -15,15 +15,8 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
     public ArrayDeque() {
         a = (T[]) new Object[8];
         n = 0;
-        nextFirst = 0;
-        nextLast = 0;
-    }
-
-    public ArrayDeque(int nf, int nl) {
-        a = (T[]) new Object[8];
-        n = 0;
-        nextFirst = nf;
-        nextLast = nl;
+        nextFirst = 4;
+        nextLast = 5;
     }
 
     // return the number of items on the randomized queue
@@ -33,7 +26,7 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
 
     private void resize(int newsize) {
         T[] temp = (T[]) new Object[newsize];
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < a.length; i++) {
             temp[i] = a[i];
         }
         a = temp;
@@ -49,8 +42,11 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
     }
 
     public void addLast(T item) {
-        if (n == a.length - 1) {
+        if (n == a.length - 2) {
             resize(a.length * 2);
+        }
+        while (a[nextLast] != null) {
+            nextLast = (nextLast + 1) % a.length;
         }
         a[nextLast] = item;
         nextLast = (nextLast + 1) % a.length;
@@ -61,22 +57,11 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
         if (n == 0) {
             return null;
         }
-        /*T item;
-        if (nextFirst != 0) {
-            int temp = (nextFirst + 1) % a.length;
-            item = a[nextFirst];
-            a[nextFirst] = null;
-            nextFirst = temp;
-        } else {
-            item = a[nextFirst];
-            a[nextFirst] = null;
-            nextFirst = (nextFirst + 1) % a.length;
-        }*/
         nextFirst = (nextFirst + 1) % a.length;
         T item = a[nextFirst];
         a[nextFirst] = null;
         n--;
-        if (n > 8 && n == a.length / 4) {
+        if (n > 0 && n == a.length / 4) {
             resize(a.length / 2);
         }
         return item;
@@ -86,11 +71,7 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
         if (n == 0) {
             return null;
         }
-        if (nextLast == 0) {
-            nextLast = (nextLast + a.length - 1) % a.length;
-        } else {
-            nextLast = nextLast - 1;
-        }
+        nextLast = (nextLast + a.length - 1) % a.length;
         T item = a[nextLast];
         a[nextLast] = null;
         n--;
@@ -117,13 +98,11 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
     }
 
     private class ArrayDequeIterator implements Iterator<T> {
-
         private int m;
 
         private ArrayDequeIterator() {
             m = 0;
         }
-
 
         public boolean hasNext() {
             return m < n;

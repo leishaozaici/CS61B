@@ -9,7 +9,8 @@ public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
     private Node first;
     private Node last;
     private int n;
-    
+    private Node sentinel;
+
     private class Node {
         private T t;
         private Node pre, next;
@@ -43,6 +44,7 @@ public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
             last = first;
         }
         n++;
+        sentinel = first;
     }
 
     // add the t to the back
@@ -60,6 +62,7 @@ public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
             first = last;
         }
         n++;
+        sentinel = first;
     }
 
     // remove and return the t from the front
@@ -103,7 +106,7 @@ public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
 
     public T get(int index) {
         int i = 0;
-        T t1 = first.t;
+        T t1 = null;
         for (T t : this) {
             if (i == index) {
                 t1 = t;
@@ -115,36 +118,18 @@ public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
     }
 
     public T getRecursive(int index) {
-        /*int i = 0;
-        T t = first.t;
-        if (i == index) {
-            return t;
-        } else {
-            first = first.next;
-            i++;
-            getRecursive(index);
-        }
-        return t;*/
-       /* if (first.t != get(index) && first != null) {
-            first = first.next;
-            getRecursive(index);
-        }
-        if (first.t == get(index)) {
-            first = first.next;
-            return get(index);
-        }
-        return null;*/
         if (index < 0 || index > n - 1) {
             return null;
         }
-        return getRecursiveHelper(index, first.next);
-    }
-
-    private T getRecursiveHelper(int index, Node currentNode) {
-        if (index == 0) {
-            return currentNode.t;
+        if (sentinel != null) {
+            if (sentinel.t != get(index)) {
+                sentinel = sentinel.next;
+                getRecursive(index);
+            } else {
+                return sentinel.t;
+            }
         }
-        return getRecursiveHelper(index - 1, currentNode.next);
+        return sentinel.t;
     }
 
     // return an iterator over items in order from front to back
