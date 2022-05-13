@@ -51,13 +51,11 @@ public class GuitarString {
         double second = buffer.get(0);
         double newSample = DECAY * 0.5 * (first + second);
         buffer.addLast(newSample);
-
     }
 
     /* Return the double at the front of the buffer. */
     public double sample() {
-
-        return 0;
+        return buffer.get(0);
     }
 }
 

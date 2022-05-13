@@ -95,6 +95,7 @@ public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
         } else {
             last.next = null;
         }
+        sentinel = first;
         return t;
     }
 

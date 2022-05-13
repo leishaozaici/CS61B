@@ -1,5 +1,6 @@
 package deque;
 
+import edu.princeton.cs.algs4.StdOut;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -222,6 +223,13 @@ public class ArrayDequeTest {
             assertEquals("sameValue", i, (int) ArrayDeque.removeLast());
 
         }
+    }
+
+    @Test
+    public void addlAndget() {
+        ArrayDeque<Integer> ArrayDeque = new ArrayDeque<>();
+        ArrayDeque.addLast(0);
+        StdOut.println(ArrayDeque.get(0));
     }
 
 }

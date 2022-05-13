@@ -100,7 +100,7 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
     }
 
     public T get(int index) {
-        return a[index];
+        return a[(index + 1 + nextFirst) % a.length];
     }
 
     public void printDeque() {

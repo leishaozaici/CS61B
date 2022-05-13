@@ -1,6 +1,5 @@
 package deque;
 
-import edu.princeton.cs.algs4.StdOut;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -130,8 +129,8 @@ public class LinkedListDequeTest {
         }
         for (int i = 0; i < 10000; i++) {
             assertEquals("sameValue", i, (int) lld1.get(i));
-            /*assertEquals("sameValue", i, (int) lld1.getRecursive(i))*/
-            StdOut.print(lld1.getRecursive(i) + " ");
+            assertEquals("sameValue", i, (int) lld1.getRecursive(i));
+            /*StdOut.print(lld1.getRecursive(i) + " ");*/
         }
     }
 
