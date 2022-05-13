@@ -26,30 +26,48 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
 
     private void resize(int newsize) {
         T[] temp = (T[]) new Object[newsize];
-        for (int i = 0; i < a.length; i++) {
-            temp[i] = a[i];
+        int first = addOne(nextFirst);
+        int last = minusOne(nextLast);
+        if (first < last) {
+            System.arraycopy(a, first, temp, 0, n);
+        } else {
+            if (first <= a.length - 1) {
+                System.arraycopy(a, first, temp, 0, a.length - first);
+            }
+            if (last >= 0) {
+                System.arraycopy(a, 0, temp, a.length - first, last + 1);
+            }
         }
         a = temp;
+        nextFirst = a.length - 1;
+        nextLast = n;
+    }
+
+    // computed the index immediately “before” a given index
+    private int minusOne(int index) {
+        return (index + a.length - 1) % a.length;
+    }
+
+    // computed the index immediately “after” a given index
+    private int addOne(int index) {
+        return (index + 1) % a.length;
     }
 
     public void addFirst(T item) {
-        if (n == a.length - 1) {
+        if (n == a.length) {
             resize(a.length * 2);
         }
         a[nextFirst] = item;
-        nextFirst = (nextFirst + a.length - 1) % a.length;
+        nextFirst = minusOne(nextFirst);
         n++;
     }
 
     public void addLast(T item) {
-        if (n == a.length - 2) {
+        if (n == a.length) {
             resize(a.length * 2);
         }
-        while (a[nextLast] != null) {
-            nextLast = (nextLast + 1) % a.length;
-        }
         a[nextLast] = item;
-        nextLast = (nextLast + 1) % a.length;
+        nextLast = addOne(nextLast);
         n++;
     }
 
@@ -57,11 +75,11 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
         if (n == 0) {
             return null;
         }
-        nextFirst = (nextFirst + 1) % a.length;
+        nextFirst = addOne(nextFirst);
         T item = a[nextFirst];
         a[nextFirst] = null;
         n--;
-        if (n > 0 && n == a.length / 4) {
+        if ((n < a.length / 4 + 1) && (a.length > 16)) {
             resize(a.length / 2);
         }
         return item;
@@ -71,11 +89,11 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
         if (n == 0) {
             return null;
         }
-        nextLast = (nextLast + a.length - 1) % a.length;
+        nextLast = minusOne(nextLast);
         T item = a[nextLast];
         a[nextLast] = null;
         n--;
-        if (n > 8 && n == a.length / 4) {
+        if ((n < a.length / 4 + 1) && (a.length > 16)) {
             resize(a.length / 2);
         }
         return item;

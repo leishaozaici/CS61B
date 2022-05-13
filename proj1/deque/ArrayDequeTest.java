@@ -1,6 +1,5 @@
 package deque;
 
-import edu.princeton.cs.algs4.StdOut;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -198,29 +197,31 @@ public class ArrayDequeTest {
         deque.addFirst("f");
     }*/
     @Test
-    public void addfAndrmlTest() {
+    public void addlAndrmfTest() {
         ArrayDeque<Integer> deque = new ArrayDeque<>();
-        /*for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10000; i++) {
             deque.addLast(i);
         }
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10000; i++) {
             assertEquals("sameValue", i, (int) deque.removeFirst());
 
-        }*/
-        deque.addFirst(0);
-//        deque.removeLast();
+        }
+        /*deque.addFirst(0);
         deque.addFirst(2);
         deque.get(0);
-        StdOut.print(deque.removeLast());
+        StdOut.print(deque.removeLast());*/
     }
 
     @Test
-    public void addlAndrmfTest() {
+    public void addfAndrmlTest() {
         ArrayDeque<Integer> ArrayDeque = new ArrayDeque<>();
-        ArrayDeque.addLast(0);
-        ArrayDeque.addLast(1);
-        ArrayDeque.addLast(2);
-        StdOut.print(ArrayDeque.removeFirst());
+        for (int i = 0; i < 20; i++) {
+            ArrayDeque.addFirst(i);
+        }
+        for (int i = 0; i < 20; i++) {
+            assertEquals("sameValue", i, (int) ArrayDeque.removeLast());
+
+        }
     }
 
 }

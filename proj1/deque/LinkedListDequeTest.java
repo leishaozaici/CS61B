@@ -125,10 +125,10 @@ public class LinkedListDequeTest {
     @Test
     public void RecursiveGetTest() {
         LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10000; i++) {
             lld1.addLast(i);
         }
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10000; i++) {
             assertEquals("sameValue", i, (int) lld1.get(i));
             /*assertEquals("sameValue", i, (int) lld1.getRecursive(i))*/
             StdOut.print(lld1.getRecursive(i) + " ");
