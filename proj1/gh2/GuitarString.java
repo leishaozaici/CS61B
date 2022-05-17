@@ -31,7 +31,6 @@ public class GuitarString {
 
     /* Pluck the guitar string by replacing the buffer with white noise. */
     public void pluck() {
-
         //       Make sure that your random numbers are different from each
         //       other. This does not mean that you need to check that the numbers
         //       are different from each other. It means you should repeatedly call
