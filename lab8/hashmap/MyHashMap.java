@@ -1,13 +1,14 @@
 package hashmap;
 
-import java.util.Collection;
+import java.util.*;
 
 /**
- *  A hash table-backed Map implementation. Provides amortized constant time
- *  access to elements via get(), remove(), and put() in the best case.
+ * A hash table-backed Map implementation. Provides amortized constant time
+ * access to elements via get(), remove(), and put() in the best case.
+ * <p>
+ * Assumes null keys will never be inserted, and does not resize down upon remove().
  *
- *  Assumes null keys will never be inserted, and does not resize down upon remove().
- *  @author YOUR NAME HERE
+ * @author YOUR NAME HERE
  */
 public class MyHashMap<K, V> implements Map61B<K, V> {
 
@@ -27,65 +28,192 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
 
     /* Instance Variables */
     private Collection<Node>[] buckets;
+
+    private Set<K> keySets;
+    private final static int DEFAULT_INITIAL_SIZE = 17;
+    private final static double DEFAULT_LODAD_FACTOR = 0.75;
+    private int initialSize;
+    private double loadFactor;
+    private int bucketSize;
+    private int nodeSize;
+
     // You should probably define some more!
 
-    /** Constructors */
-    public MyHashMap() { }
+    /**
+     * Constructors
+     */
+    public MyHashMap() {
+        this(DEFAULT_INITIAL_SIZE, DEFAULT_LODAD_FACTOR);
+    }
 
-    public MyHashMap(int initialSize) { }
+    public MyHashMap(int initialSize) {
+        this(initialSize, DEFAULT_LODAD_FACTOR);
+    }
 
     /**
      * MyHashMap constructor that creates a backing array of initialSize.
      * The load factor (# items / # buckets) should always be <= loadFactor
      *
      * @param initialSize initial size of backing array
-     * @param maxLoad maximum load factor
+     * @param maxLoad     maximum load factor
      */
-    public MyHashMap(int initialSize, double maxLoad) { }
+    public MyHashMap(int initialSize, double maxLoad) {
+        this.initialSize = initialSize;
+        this.loadFactor = maxLoad;
+        bucketSize = initialSize;
+        nodeSize = 0;
+        keySets = new HashSet<>();
+        buckets = createTable(initialSize);
+        for (int i = 0; i < bucketSize; i++) {
+            buckets[i] = createBucket();
+        }
+
+    }
 
     /**
      * Returns a new node to be placed in a hash table bucket
      */
     private Node createNode(K key, V value) {
-        return null;
+        return new Node(key, value);
     }
 
     /**
      * Returns a data structure to be a hash table bucket
-     *
+     * <p>
      * The only requirements of a hash table bucket are that we can:
-     *  1. Insert items (`add` method)
-     *  2. Remove items (`remove` method)
-     *  3. Iterate through items (`iterator` method)
-     *
+     * 1. Insert items (`add` method)
+     * 2. Remove items (`remove` method)
+     * 3. Iterate through items (`iterator` method)
+     * <p>
      * Each of these methods is supported by java.util.Collection,
      * Most data structures in Java inherit from Collection, so we
      * can use almost any data structure as our buckets.
-     *
+     * <p>
      * Override this method to use different data structures as
      * the underlying bucket type
-     *
+     * <p>
      * BE SURE TO CALL THIS FACTORY METHOD INSTEAD OF CREATING YOUR
      * OWN BUCKET DATA STRUCTURES WITH THE NEW OPERATOR!
      */
     protected Collection<Node> createBucket() {
-        return null;
+        return new LinkedList<>();
     }
 
     /**
      * Returns a table to back our hash table. As per the comment
      * above, this table can be an array of Collection objects
-     *
+     * <p>
      * BE SURE TO CALL THIS FACTORY METHOD WHEN CREATING A TABLE SO
      * THAT ALL BUCKET TYPES ARE OF JAVA.UTIL.COLLECTION
      *
      * @param tableSize the size of the table to create
      */
     private Collection<Node>[] createTable(int tableSize) {
-        return null;
+        return new Collection[tableSize];
     }
 
     // TODO: Implement the methods of the Map61B Interface below
     // Your code won't compile until you do so!
 
+    private int hash(K key) {
+        int hash = key.hashCode();
+        return Math.floorMod(hash, bucketSize);
+    }
+
+    @Override
+    public void clear() {
+        for (int i = 0; i < bucketSize; i++) {
+            buckets[i].clear();
+        }
+        keySets.clear();
+        nodeSize = 0;
+    }
+
+    private Node getNode(K key) {
+        int i = hash(key);
+        for (Node node : buckets[i]) {
+            if (Objects.equals(node.key, key)) {
+                return node;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public boolean containsKey(K key) {
+        return getNode(key) != null;
+    }
+
+    @Override
+    public V get(K key) {
+        Node node = getNode(key);
+        if (node == null) {
+            return null;
+        }
+        return node.value;
+    }
+
+    @Override
+    public int size() {
+        return nodeSize;
+    }
+
+    private void resize(int newBucketSize) {
+        MyHashMap<K, V> newMyHashMap = new MyHashMap<>(newBucketSize, this.loadFactor);
+        for (K key : keySet()) {
+            newMyHashMap.put(key, get(key));
+        }
+        this.bucketSize = newMyHashMap.bucketSize;
+        this.buckets = newMyHashMap.buckets;
+    }
+
+    @Override
+    public void put(K key, V value) {
+        Node node = getNode(key);
+        if (node == null) {
+            int i = hash(key);
+            Node newNode = createNode(key, value);
+            buckets[i].add(newNode);
+            nodeSize++;
+            keySets.add(key);
+            if (nodeSize * 1.0 / bucketSize >= loadFactor) {
+                resize(bucketSize * 2);
+            }
+        } else {
+            node.value = value;
+        }
+
+
+    }
+
+    @Override
+    public Set<K> keySet() {
+        return keySets;
+    }
+
+    @Override
+    public V remove(K key) {
+        return remove(key, get(key));
+    }
+
+    @Override
+    public V remove(K key, V value) {
+        if (key == null) {
+            throw new IllegalArgumentException("argument to delete() is null");
+        }
+        int i = hash(key);
+        Node node = getNode(key);
+        if (node == null || !node.value.equals(value)) {
+            return null;
+        }
+        buckets[i].remove(node);
+        nodeSize -= 1;
+        keySets.remove(key);
+        return value;
+    }
+
+    @Override
+    public Iterator<K> iterator() {
+        return keySet().iterator();
+    }
 }
